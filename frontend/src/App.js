@@ -12,7 +12,6 @@ function App() {
      <Header />
      <main className='my-4'>
       <Container>
-        <h1>Ecommerce app</h1>
         <Routes>
           <Route path='/' element={<HomeScreen/>} exact />
           <Route path='/product/:id' element={<ProductDetails />} />
