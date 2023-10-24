@@ -1,5 +1,4 @@
-import React from "react";
-import { products } from "../products";
+import React, {useState, useEffect} from "react";
 import {
   Row,
   Col,
@@ -10,12 +9,20 @@ import {
 } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import Rating from "../components/Rating";
-
+import axios from 'axios';
 
 
 const ProductDetails = () => {
   const params = useParams();
-  const product = products.find((p) => p._id === params.id);
+  const [Product, setProduct] = useState([]);
+
+  useEffect(() => {
+    const fetchProduct = async() => {
+      const {data} = await axios.get(`/products/${params.id}`)
+      setProduct(data);
+    }
+    fetchProduct();
+  },[])
 
   return (
     <div>
@@ -24,21 +31,21 @@ const ProductDetails = () => {
         &nbsp;Go Back</Link>
       <Row>
         <Col md={6}>
-          <Image src={product.image} alt={product.name} fluid />
+          <Image src={Product.image} alt={Product.name} fluid />
         </Col>
         <Col md={3}>
           <ListGroup variant="flush">
             <ListGroupItem>
-              <h3>{product.name}</h3>
+              <h3>{Product.name}</h3>
             </ListGroupItem>
             <ListGroupItem>
-                <Rating value={product.rating} text={`${product.numReviews} Reviews`} />
+                <Rating value={Product.rating} text={`${Product.numReviews} Reviews`} />
             </ListGroupItem>
             <ListGroupItem>
-                Price: $ {product.price}
+                Price: $ {Product.price}
             </ListGroupItem>
             <ListGroupItem>
-                {product.description}
+                {Product.description}
             </ListGroupItem>
           </ListGroup>
         </Col>
@@ -46,7 +53,7 @@ const ProductDetails = () => {
             <ListGroupItem>
                 <Row>
                     <Col>Status:</Col>
-                    <Col>{product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}</Col>
+                    <Col>{Product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}</Col>
                 </Row>
             </ListGroupItem>
             <ListGroupItem>
